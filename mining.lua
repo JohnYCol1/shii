@@ -124,7 +124,7 @@ waitForRespawn()
 for i = 1, 2 do
     print("🔄 Teleporting to start position (Attempt " .. i .. ")...")
     tweenToPosition(returnPosition)
-    task.wait(1)
+    task.wait(0.1)
 end
 
 -- 🎯 Main execution loop
