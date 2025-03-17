@@ -33,7 +33,7 @@ end)
 local function waitForRespawn()
     player.CharacterAdded:Connect(function()
         print("🕒 Waiting for respawn...")
-        task.wait(5) -- Adjust the wait time if needed
+        task.wait(6) -- Adjust the wait time if needed
         print("✅ Respawn complete, resuming script!")
     end)
 end
