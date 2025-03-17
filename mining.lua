@@ -12,7 +12,7 @@ local tweenSpeed = 2.6 -- Change this value to make movement faster/slower
 -- 🔹 NEW Start & End Position
 local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
 
-local mineTimeout = 5
+local mineTimeout = 8
 local isRunning = true
 local blacklist = {}
 
