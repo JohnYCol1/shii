@@ -7,12 +7,12 @@ local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
 
 -- 🔧 TWEEN SPEED (Adjust movement speed)
-local tweenSpeed = 2.6 -- Change this value to make movement faster/slower
+local tweenSpeed = 5 -- Change this value to make movement faster/slower
 
 -- 🔹 NEW Start & End Position
 local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
 
-local mineTimeout = 8
+local mineTimeout = 10
 local isRunning = true
 local blacklist = {}
 
@@ -28,6 +28,15 @@ Players.LocalPlayer.OnTeleport:Connect(function()
     waitForCharacterLoad()
     isRunning = true
 end)
+
+-- ⏳ Wait after respawn before continuing
+local function waitForRespawn()
+    player.CharacterAdded:Connect(function()
+        print("🕒 Waiting for respawn...")
+        task.wait(5) -- Adjust the wait time if needed
+        print("✅ Respawn complete, resuming script!")
+    end)
+end
 
 -- 🚶 Move player to a position safely
 local function tweenToPosition(targetCFrame)
@@ -84,7 +93,7 @@ local function checkOreMineable(ore)
     if not ore or not ore.PrimaryPart then
         print("⚠️ No valid ores found! Returning to start position...")
         tweenToPosition(returnPosition)
-        task.wait(3)
+        task.wait(2)
         return false
     end
 
@@ -99,7 +108,7 @@ local function checkOreMineable(ore)
             blacklist[ore] = true
             return true
         end
-        task.wait(2.5) -- Increased wait time per loop for laggy servers
+        task.wait(2) -- Increased wait time per loop for laggy servers
     end
 
     blacklist[ore] = true
@@ -109,6 +118,7 @@ end
 
 -- 🕒 Wait for everything to load before starting
 waitForCharacterLoad()
+waitForRespawn()
 
 -- 🎯 Main execution loop
 while isRunning do
@@ -116,11 +126,11 @@ while isRunning do
     if ore then
         local success = checkOreMineable(ore)
         if success then
-            task.wait(0.5) -- Increased delay before moving to next ore
+            task.wait(1) -- Increased delay before moving to next ore
         end
     else
         print("⚠️ No ores detected! Returning to start...")
         tweenToPosition(returnPosition)
-        task.wait(2.5)
+        task.wait(2)
     end
 end
