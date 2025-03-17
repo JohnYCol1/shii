@@ -121,10 +121,10 @@ waitForCharacterLoad()
 waitForRespawn()
 
 -- 🚀 Teleport to start position 3 times
-for i = 1, 2 do
+for i = 1, 3 do
     print("🔄 Teleporting to start position (Attempt " .. i .. ")...")
     tweenToPosition(returnPosition)
-    task.wait(0.1)
+    task.wait(0.5)
 end
 
 -- 🎯 Main execution loop
