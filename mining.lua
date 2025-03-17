@@ -84,7 +84,7 @@ local function checkOreMineable(ore)
     if not ore or not ore.PrimaryPart then
         print("⚠️ No valid ores found! Returning to start position...")
         tweenToPosition(returnPosition)
-        task.wait(2)
+        task.wait(3)
         return false
     end
 
@@ -99,7 +99,7 @@ local function checkOreMineable(ore)
             blacklist[ore] = true
             return true
         end
-        task.wait(2) -- Increased wait time per loop for laggy servers
+        task.wait(3) -- Increased wait time per loop for laggy servers
     end
 
     blacklist[ore] = true
@@ -121,6 +121,6 @@ while isRunning do
     else
         print("⚠️ No ores detected! Returning to start...")
         tweenToPosition(returnPosition)
-        task.wait(2)
+        task.wait(3)
     end
 end
