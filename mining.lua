@@ -7,7 +7,7 @@ local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
 
 -- 🔧 TWEEN SPEED (Adjust movement speed)
-local tweenSpeed = 5 -- Change this value to make movement faster/slower
+local tweenSpeed = 3.5 -- Change this value to make movement faster/slower
 
 -- 🔹 NEW Start & End Position
 local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
@@ -121,7 +121,7 @@ waitForCharacterLoad()
 waitForRespawn()
 
 -- 🚀 Teleport to start position 3 times
-for i = 1, 3 do
+for i = 1, 2 do
     print("🔄 Teleporting to start position (Attempt " .. i .. ")...")
     tweenToPosition(returnPosition)
     task.wait(1)
