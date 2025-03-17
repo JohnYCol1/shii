@@ -99,7 +99,7 @@ local function checkOreMineable(ore)
             blacklist[ore] = true
             return true
         end
-        task.wait(3) -- Increased wait time per loop for laggy servers
+        task.wait(2.5) -- Increased wait time per loop for laggy servers
     end
 
     blacklist[ore] = true
@@ -116,11 +116,11 @@ while isRunning do
     if ore then
         local success = checkOreMineable(ore)
         if success then
-            task.wait(1) -- Increased delay before moving to next ore
+            task.wait(0.5) -- Increased delay before moving to next ore
         end
     else
         print("⚠️ No ores detected! Returning to start...")
         tweenToPosition(returnPosition)
-        task.wait(3)
+        task.wait(2.5)
     end
 end
