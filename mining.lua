@@ -131,12 +131,6 @@ resetCharacter()
 waitForCharacterLoad()
 waitForRespawn()
 
--- 🚀 Teleport to the start position three times
-for i = 1, 3 do
-    tweenToPosition(returnPosition)
-    task.wait(1)
-end
-
 -- 🎯 Main execution loop
 while isRunning do
     local ore = getMineableOre()
