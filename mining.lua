@@ -143,6 +143,28 @@ local function detectFalling()
     end
 end
 
+-- 🛑 Create a stop button
+local function createStopButton()
+    local playerGui = player:FindFirstChild("PlayerGui")
+    if not playerGui then return end
+
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Parent = playerGui
+
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 100, 0, 50)
+    button.Position = UDim2.new(0.9, 0, 0.1, 0)
+    button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    button.Text = "STOP"
+    button.Parent = screenGui
+
+    button.MouseButton1Click:Connect(function()
+        isRunning = false
+        screenGui:Destroy()
+        print("⛔ Script Stopped. All functions disabled.")
+    end)
+end
+
 -- 🔄 Reset character before starting script execution
 wait(8)
 resetCharacter()
@@ -151,6 +173,7 @@ resetCharacter()
 waitForCharacterLoad()
 waitForRespawn()
 task.spawn(detectFalling) -- Start falling detection in a separate task
+createStopButton() -- Create stop button
 wait(8)
 
 -- 🎯 Main execution loop
