@@ -14,7 +14,7 @@ local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
 local mineTimeout = 8
 local isRunning = true
 local blacklist = {}
-local fallingCheckTime = 6  -- Time before reset if falling
+local fallingCheckTime = 8  -- Time before reset if falling
 
 -- 🔄 Reset character before starting (Client-Side)
 local function resetCharacter()
