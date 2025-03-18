@@ -6,7 +6,7 @@ local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
 
 -- 🔧 TWEEN SPEED (Adjust movement speed)
-local tweenSpeed = 4
+local tweenSpeed = 3 
 
 -- 🔹 Start & End Position
 local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
@@ -14,7 +14,7 @@ local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
 local mineTimeout = 8
 local isRunning = true
 local blacklist = {}
-local fallingCheckTime = 8  -- Time before reset if falling
+local criticalFallY = -50  -- Y-axis threshold to detect falling out of the map
 
 -- 🔄 Reset character before starting (Client-Side)
 local function resetCharacter()
@@ -125,30 +125,18 @@ local function checkOreMineable(ore)
     return false
 end
 
--- 🚨 Detect if the character is falling and reset
+-- 🚨 Detect if the character falls out of the map
 local function detectFalling()
     while isRunning do
         local character = player.Character
         if character and character:FindFirstChild("HumanoidRootPart") then
             local rootPart = character.HumanoidRootPart
-            local raycastParams = RaycastParams.new()
-            raycastParams.FilterDescendantsInstances = {character}
-            raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
             
-            local rayOrigin = rootPart.Position
-            local rayDirection = Vector3.new(0, -10, 0) -- Cast a ray downward
-            local result = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
-
-            if not result then -- If no ground is detected
-                print("⚠️ Character is falling! Resetting in", fallingCheckTime, "seconds if not fixed...")
-                task.wait(fallingCheckTime)
-
-                local newResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
-                if not newResult then
-                    print("❌ Character is still falling! Resetting now...")
-                    resetCharacter()
-                    task.wait(8) -- Allow respawn before continuing
-                end
+            -- If the player falls below the map threshold (-500 or lower)
+            if rootPart.Position.Y <= criticalFallY then
+                print("❌ Character fell out of the map! Resetting instantly...")
+                resetCharacter()
+                task.wait(8) -- Allow respawn before continuing
             end
         end
         task.wait(1)
@@ -169,13 +157,4 @@ wait(8)
 while isRunning do
     local ore = getMineableOre()
     if ore then
-        local success = checkOreMineable(ore)
-        if success then
-            task.wait(1)
-        end
-    else
-        print("⚠️ No ores detected! Returning to start...")
-        tweenToPosition(returnPosition)
-        task.wait(2)
-    end
-end
+        local success = checkO
