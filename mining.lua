@@ -14,7 +14,7 @@ local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
 local mineTimeout = 8
 local isRunning = true
 local blacklist = {}
-local criticalFallY = -100  -- Y-axis threshold to detect falling out of the map
+local criticalFallY = -500  -- Y-axis threshold to detect falling out of the map
 
 -- 🔄 Reset character before starting (Client-Side)
 local function resetCharacter()
@@ -157,4 +157,13 @@ wait(8)
 while isRunning do
     local ore = getMineableOre()
     if ore then
-        local success = checkO
+        local success = checkOreMineable(ore)
+        if success then
+            task.wait(1)
+        end
+    else
+        print("⚠️ No ores detected! Returning to start...")
+        tweenToPosition(returnPosition)
+        task.wait(2)
+    end
+end
