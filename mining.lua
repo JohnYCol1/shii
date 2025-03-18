@@ -1,5 +1,4 @@
 local TweenService = game:GetService("TweenService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local TeleportService = game:GetService("TeleportService")
@@ -7,14 +6,23 @@ local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
 
 -- 🔧 TWEEN SPEED (Adjust movement speed)
-local tweenSpeed = 4.5 -- Change this value to make movement faster/slower
+local tweenSpeed = 2.5 
 
--- 🔹 NEW Start & End Position
+-- 🔹 Start & End Position
 local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
 
 local mineTimeout = 8
 local isRunning = true
 local blacklist = {}
+
+-- 🔄 Reset character before starting (Client-Side)
+local function resetCharacter()
+    local character = player.Character
+    if character and character:FindFirstChild("Humanoid") then
+        character.Humanoid:TakeDamage(1000) -- Kill the player
+        print("🔄 Character reset before script execution.")
+    end
+end
 
 -- 🕒 Wait for character and game assets to load
 local function waitForCharacterLoad()
@@ -33,7 +41,7 @@ end)
 local function waitForRespawn()
     player.CharacterAdded:Connect(function()
         print("🕒 Waiting for respawn...")
-        task.wait(6) -- Adjust the wait time if needed
+        task.wait(6) -- Adjust wait time if needed
         print("✅ Respawn complete, resuming script!")
     end)
 end
@@ -59,18 +67,18 @@ local function tweenToPosition(targetCFrame)
     tween.Completed:Wait()
 end
 
--- 🔁 Press "E" repeatedly to mine ores with anti-detection
+-- 🔁 Press "E" repeatedly to mine ores
 local function spamEKey()
-    for i = 1, 15 do  -- Increased iterations for laggy servers
+    for i = 1, 15 do 
         VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-        task.wait(math.random(0.3, 0.5)) -- Increased wait time
+        task.wait(math.random(0.3, 0.5)) 
         VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
-        task.wait(0.2) -- Added extra wait
+        task.wait(0.2) 
     end
     print("⚒️ Spammed E key to mine")
 end
 
--- ⚒️ Get a valid, mineable ore (Only Mithril, skips trees)
+-- ⚒️ Get a valid, mineable ore
 local function getMineableOre()
     local oreFolder = workspace:FindFirstChild("Harvestable")
     if not oreFolder then return nil end
@@ -108,7 +116,7 @@ local function checkOreMineable(ore)
             blacklist[ore] = true
             return true
         end
-        task.wait(2) -- Increased wait time per loop for laggy servers
+        task.wait(2)
     end
 
     blacklist[ore] = true
@@ -116,15 +124,17 @@ local function checkOreMineable(ore)
     return false
 end
 
+-- 🔄 Reset character before starting script execution
+resetCharacter()
+
 -- 🕒 Wait for everything to load before starting
 waitForCharacterLoad()
 waitForRespawn()
 
--- 🚀 Teleport to start position 3 times
+-- 🚀 Teleport to the start position three times
 for i = 1, 3 do
-    print("🔄 Teleporting to start position (Attempt " .. i .. ")...")
     tweenToPosition(returnPosition)
-    task.wait(0.5)
+    task.wait(1)
 end
 
 -- 🎯 Main execution loop
@@ -133,7 +143,7 @@ while isRunning do
     if ore then
         local success = checkOreMineable(ore)
         if success then
-            task.wait(1) -- Increased delay before moving to next ore
+            task.wait(1)
         end
     else
         print("⚠️ No ores detected! Returning to start...")
