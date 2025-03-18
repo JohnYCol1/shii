@@ -14,7 +14,7 @@ local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
 local mineTimeout = 8
 local isRunning = true
 local blacklist = {}
-local criticalFallY = -50  -- Y-axis threshold to detect falling out of the map
+local criticalFallY = -100  -- Y-axis threshold to detect falling out of the map
 
 -- 🔄 Reset character before starting (Client-Side)
 local function resetCharacter()
