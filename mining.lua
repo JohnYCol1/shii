@@ -6,7 +6,7 @@ local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
 
 -- 🔧 TWEEN SPEED (Adjust movement speed)
-local tweenSpeed = 3
+local tweenSpeed = 3 
 
 -- 🔹 Start & End Position
 local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
@@ -14,13 +14,14 @@ local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
 local mineTimeout = 8
 local isRunning = true
 local blacklist = {}
+local fallingCheckTime = 3  -- Time before reset if falling
 
 -- 🔄 Reset character before starting (Client-Side)
 local function resetCharacter()
     local character = player.Character
     if character and character:FindFirstChild("Humanoid") then
         character.Humanoid:TakeDamage(1000) -- Kill the player
-        print("🔄 Character reset before script execution.")
+        print("🔄 Character reset due to falling or script start.")
     end
 end
 
@@ -124,6 +125,36 @@ local function checkOreMineable(ore)
     return false
 end
 
+-- 🚨 Detect if the character is falling and reset
+local function detectFalling()
+    while isRunning do
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local rootPart = character.HumanoidRootPart
+            local raycastParams = RaycastParams.new()
+            raycastParams.FilterDescendantsInstances = {character}
+            raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+            
+            local rayOrigin = rootPart.Position
+            local rayDirection = Vector3.new(0, -10, 0) -- Cast a ray downward
+            local result = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
+
+            if not result then -- If no ground is detected
+                print("⚠️ Character is falling! Resetting in", fallingCheckTime, "seconds if not fixed...")
+                task.wait(fallingCheckTime)
+
+                local newResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
+                if not newResult then
+                    print("❌ Character is still falling! Resetting now...")
+                    resetCharacter()
+                    task.wait(8) -- Allow respawn before continuing
+                end
+            end
+        end
+        task.wait(1)
+    end
+end
+
 -- 🔄 Reset character before starting script execution
 wait(8)
 resetCharacter()
@@ -131,7 +162,9 @@ resetCharacter()
 -- 🕒 Wait for everything to load before starting
 waitForCharacterLoad()
 waitForRespawn()
+task.spawn(detectFalling) -- Start falling detection in a separate task
 wait(8)
+
 -- 🎯 Main execution loop
 while isRunning do
     local ore = getMineableOre()
