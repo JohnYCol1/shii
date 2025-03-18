@@ -6,7 +6,7 @@ local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
 
 -- 🔧 TWEEN SPEED (Adjust movement speed)
-local tweenSpeed = 3 
+local tweenSpeed = 4
 
 -- 🔹 Start & End Position
 local returnPosition = CFrame.new(-532.117, 338.489, 10.078)
