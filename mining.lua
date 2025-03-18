@@ -125,12 +125,13 @@ local function checkOreMineable(ore)
 end
 
 -- 🔄 Reset character before starting script execution
+wait(8)
 resetCharacter()
 
 -- 🕒 Wait for everything to load before starting
 waitForCharacterLoad()
 waitForRespawn()
-
+wait(8)
 -- 🎯 Main execution loop
 while isRunning do
     local ore = getMineableOre()
